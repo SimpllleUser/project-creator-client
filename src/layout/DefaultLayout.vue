@@ -8,16 +8,12 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item>
-              <router-link to="/">
-                <b-button variant="black" class="text-white" size="sm">Home</b-button>
-              </router-link>
-            </b-nav-item>
-            <b-nav-item>
-              <router-link to="/about">
-                <b-button variant="black" class="text-white" size="sm">About</b-button>
-              </router-link>
-            </b-nav-item>
+            <nav-link
+              v-for="link in links"
+              :key="link.path"
+              :path="link.path"
+              >{{ link.label }}</nav-link
+            >
           </b-navbar-nav>
 
           <b-navbar-nav class="ml-auto">
@@ -42,8 +38,27 @@
 </template>
 
 <script>
+import NavLink from "@/components/common/NavLink.vue";
+
 export default {
   name: "DefaultLayout",
+  components: {
+    NavLink,
+  },
+  data() {
+    return {
+      links: [
+        {
+          path: "/",
+          label: "Home",
+        },
+        {
+          path: "/about",
+          label: "About",
+        },
+      ],
+    };
+  },
 };
 </script>
 <style lang="scss">
