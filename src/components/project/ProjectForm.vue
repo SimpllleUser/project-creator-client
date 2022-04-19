@@ -1,7 +1,7 @@
 <template>
-  <div class="project-form">
+  <b-modal :id="id" :title="modalTitle" hide-header-close hide-footer>
     <b-form @submit="onSubmit">
-      <div class="form-body">
+      <div class="form-body pb-2">
         <b-form-group id="input-group-name" label="name" label-for="name">
           <b-form-input
             id="name"
@@ -23,16 +23,19 @@
           ></b-form-input>
         </b-form-group>
       </div>
-      <div class="form-footer">
-        <b-button variant="outlined-dark">
+      <div class="form-footer d-flex justify-content-end">
+        <b-button variant="outline-dark" type="submit">
           {{ buttonLabel }}
         </b-button>
       </div>
     </b-form>
-  </div>
+  </b-modal>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import types from "@/store/modules/projects/types";
+
 export default {
   name: "ProjectForm",
   props: {
@@ -60,8 +63,17 @@ export default {
     };
   },
   computed: {
+    isEditableForm() {
+      return Boolean(this.project?.id);
+    },
+    modalTitle() {
+      return `Form ${this.isEditableForm ? "edit" : "create"} project`;
+    },
     buttonLabel() {
-      return this.projectModel?.id ? "Save" : "Create";
+      return this.isEditableForm ? "Save" : "Create";
+    },
+    actionOnSubmit() {
+      return this.isEditableForm ? this.saveProject : this.createProject;
     },
   },
   watch: {
@@ -73,8 +85,14 @@ export default {
     },
   },
   methods: {
-    onSubmit(event) {
+    ...mapActions("projects", {
+      saveProject: types.CREATE_PROJECT,
+      createProject: types.CREATE_PROJECT,
+    }),
+    async onSubmit(event) {
       event.preventDefault();
+      await this.actionOnSubmit(this.projectModel);
+      this.projectModel = {};
       this.$bvModal.hide(this.id);
     },
   },

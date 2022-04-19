@@ -3,30 +3,41 @@
     <div
       class="projects-list--header d-flex justify-content-between alert alert-dark"
     >
+      <project-form id="create-project" />
       <div class="projects-list--header-title"><h4>Projects</h4></div>
       <div class="projects-list--header-actions">
-        <b-button variant="dark" size="sm" @click="$bvModal('create-project')">Create</b-button>
+        <b-button
+          variant="dark"
+          size="sm"
+          @click="$bvModal.show('create-project')"
+          >Create</b-button
+        >
       </div>
     </div>
-    <b-modal id="create-project">
-      <project-form id="create-project" />
-    </b-modal>
     <div class="projects-list--body">
       <b-table :items="projects" :fields="fields" striped hover>
         <template #cell(createdAt)="data">
           {{ new Date(data.item.createdAt).toLocaleString() }}
         </template>
         <template #cell(actions)="data">
-          <div class="d-none">
-          </div>
-          <b-modal id="edit-project">
-            <project-form id='edit-project' :project="data.item" />
-          </b-modal>
+          <div class="d-none"></div>
+          <project-form
+            :id="`edit-project-${data.item.id}`"
+            :project="data.item"
+          />
+          <project-confirm-delete
+            :id="`delete-project-${data.item.id}`"
+            :project="data.item"
+          />
           <b-button-group size="sm">
-            <b-button variant="outlined-dark" @click="$bvModal.show('edit-project')"
+            <b-button
+              variant="outlined-dark"
+              @click="$bvModal.show(`edit-project-${data.item.id}`)"
               ><b-icon icon="pen" size="sm"
             /></b-button>
-            <b-button variant="outlined-dark"
+            <b-button
+              variant="outlined-dark"
+              @click="$bvModal.show(`delete-project-${data.item.id}`)"
               ><b-icon icon="trash" size="sm"
             /></b-button>
           </b-button-group>
@@ -37,9 +48,10 @@
 </template>
 
 <script>
+import ProjectConfirmDelete from "./ProjectConfirmDelete.vue";
 import ProjectForm from "./ProjectForm.vue";
 export default {
-  components: { ProjectForm },
+  components: { ProjectForm, ProjectConfirmDelete },
   name: "ProjectList",
   props: {
     projects: {

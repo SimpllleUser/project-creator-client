@@ -11,7 +11,11 @@ export default {
         return data;
     },
     async delete(id) {
-        const { data } = await client.get(`${defaultURL}/${id}`);
+        const { data } = await client.delete(`${defaultURL}/${id}`);
+        return data;
+    },
+    async create(project) {
+        const { data } = await client.post(defaultURL, project);
         return data;
     },
 };

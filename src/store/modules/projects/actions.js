@@ -10,9 +10,12 @@ export default {
         const project = await projectRepository.getById(id);
         commit(types.SET_PROJECT, project);
     },
+    async [types.CREATE_PROJECT]({ commit }, projectBody) {
+        const project = await projectRepository.create(projectBody);
+        commit(types.ADD_PROJECT, project);
+    },
     async [types.DELETE_PROJECT]({ commit }, id) {
-        const isDeleted = await projectRepository.getById(id);
-        if (!isDeleted) return;
+        await projectRepository.delete(id);
         commit(types.SET_DELETE_PROJECT, id);
     },
 }

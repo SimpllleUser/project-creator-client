@@ -10,10 +10,15 @@ export default {
             [`${project.id}`]: project,
         };
     },
-    [types.DELETE_PROJECT](state, projectId) {
+    [types.SET_DELETE_PROJECT](state, projectId) {
+        state.projects = state.projects.filter(({ id }) => id !== projectId);
+        if (!state.project[`${projectId || 'none'}`]) return;
         state.project = {
             ...state.project,
             [`${projectId}`]: null,
         };
+    },
+      [types.ADD_PROJECT](state, project) {
+        state.projects = [project, ...state.projects];
     },
 }
