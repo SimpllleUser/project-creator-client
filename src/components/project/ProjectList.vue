@@ -5,9 +5,12 @@
     >
       <div class="projects-list--header-title"><h4>Projects</h4></div>
       <div class="projects-list--header-actions">
-        <b-button variant="dark" size="sm">Create</b-button>
+        <b-button variant="dark" size="sm" @click="$bvModal('create-project')">Create</b-button>
       </div>
     </div>
+    <b-modal id="create-project">
+      <project-form id="create-project" />
+    </b-modal>
     <div class="projects-list--body">
       <b-table :items="projects" :fields="fields" striped hover>
         <template #cell(createdAt)="data">
@@ -15,10 +18,12 @@
         </template>
         <template #cell(actions)="data">
           <div class="d-none">
-            {{ data.item.id }}
           </div>
+          <b-modal id="edit-project">
+            <project-form id='edit-project' :project="data.item" />
+          </b-modal>
           <b-button-group size="sm">
-            <b-button variant="outlined-dark"
+            <b-button variant="outlined-dark" @click="$bvModal.show('edit-project')"
               ><b-icon icon="pen" size="sm"
             /></b-button>
             <b-button variant="outlined-dark"
@@ -32,7 +37,9 @@
 </template>
 
 <script>
+import ProjectForm from "./ProjectForm.vue";
 export default {
+  components: { ProjectForm },
   name: "ProjectList",
   props: {
     projects: {
