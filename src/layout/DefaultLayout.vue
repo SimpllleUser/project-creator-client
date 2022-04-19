@@ -28,7 +28,7 @@
                   class="mr-sm-2"
                   placeholder="Search project"
                 ></b-form-input>
-                <b-button size="sm" class="my-2 my-sm-0">Search</b-button>
+                <b-button variant="outline-light" size="sm">Primary</b-button>
               </div>
             </b-nav-form>
           </b-navbar-nav>
