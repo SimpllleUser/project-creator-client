@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import projectTypes from '../store/modules/projects/types';
 import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
@@ -14,11 +12,5 @@ export default {
   components: {
     HelloWorld,
   },
-  methods: {
-    ...mapActions('projects', { getProjects: projectTypes.GET_PROJECTS }),
-  },
-  async mounted() {
-    await this.getProjects();
-  }
 }
 </script>
