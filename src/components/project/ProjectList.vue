@@ -7,10 +7,10 @@
       <div class="projects-list--header-title"><h4>Projects</h4></div>
       <div class="projects-list--header-actions">
         <b-button
-          variant="dark"
+          variant="outline-dark"
           size="sm"
           @click="$bvModal.show('create-project')"
-          >Create</b-button
+          ><b>Create</b></b-button
         >
       </div>
     </div>

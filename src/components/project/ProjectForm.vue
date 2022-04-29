@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     ...mapActions("projects", {
-      saveProject: types.CREATE_PROJECT,
+      saveProject: types.UPDATE_PROJECT,
       createProject: types.CREATE_PROJECT,
     }),
     async onSubmit(event) {

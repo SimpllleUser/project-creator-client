@@ -18,4 +18,8 @@ export default {
         await projectRepository.delete(id);
         commit(types.SET_DELETE_PROJECT, id);
     },
+    async [types.UPDATE_PROJECT]({ commit }, updatedProject) {
+        const project = await projectRepository.update(updatedProject);
+        commit(types.SET_UPDATE_PROJECT, project);
+    },
 }

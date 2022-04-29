@@ -18,7 +18,17 @@ export default {
             [`${projectId}`]: null,
         };
     },
-      [types.ADD_PROJECT](state, project) {
+    [types.ADD_PROJECT](state, project) {
         state.projects = [project, ...state.projects];
+    },
+    [types.SET_UPDATE_PROJECT](state, updatedProject) {
+        /// updated project in list ---
+        const filteredProjects = state.projects.filter(({ id }) => id !== updatedProject.id);
+        state.projects = [updatedProject, ...filteredProjects];
+        /// updated project in detail ---
+        state.project = {
+            ...state.project,
+            [`${updatedProject.id}`]: updatedProject,
+        };
     },
 }

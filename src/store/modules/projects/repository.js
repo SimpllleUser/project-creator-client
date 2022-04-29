@@ -18,4 +18,8 @@ export default {
         const { data } = await client.post(defaultURL, project);
         return data;
     },
+    async update(project) {
+        const { data } = await client.patch(`${defaultURL}/${project.id}`, project);
+        return data;
+    },
 };
