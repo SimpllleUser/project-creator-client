@@ -38,6 +38,7 @@ export default {
   .table > :not(caption) > * > * {
     padding: 4px;
     text-align: center;
+    cursor: pointer;
   }
 }
 </style>
