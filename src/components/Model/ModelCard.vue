@@ -1,6 +1,6 @@
 <template>
   <div class="model-card">
-    <b-table striped hover :items="items">
+    <b-table bordered hover :items="items">
       <template #cell()="data">
         <div>
           <div v-if="allowShowValue(data.value)">
@@ -34,7 +34,7 @@ export default {
 </script>
 <style lang="scss">
 .model-card {
-  max-width: 450px;
+  max-width: 350px;
   .table > :not(caption) > * > * {
     padding: 4px;
     text-align: center;
