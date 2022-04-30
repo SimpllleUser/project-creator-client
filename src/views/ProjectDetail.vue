@@ -1,15 +1,58 @@
 <template>
   <div class="about">
     <h1>Project detail {{ id }}</h1>
+    <div v-for="{ model } in projectModels" :key="model.name">
+      <b-card :header="model.name">
+          <model-card :items="getArrayFromObject(model.fields)"/>
+      </b-card>
+    </div>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
+import ModelCard from "../components/Model/ModelCard.vue";
+import types from "../store/modules/projects/types";
+
 export default {
-  name: 'ProjectDetail',
+  // eslint-disable-next-line vue/no-unused-components
+  components: { ModelCard },
+  name: "ProjectDetail",
   props: {
     id: {
       type: String,
-    }
+    },
   },
-}
+  datat() {
+    return {
+      projectModels: null,
+    };
+  },
+  methods: {
+    ...mapActions("projects", { getModels: types.GET_PROJECT_MODELS }),
+    getArrayFromObject(object) {
+      const keys = Object.keys(object);
+      return keys.map((key) => ({ name: key, ...object[key] }));
+    },
+  },
+  computed: {
+    ...mapState("projects", ["models"]),
+    projectModels() {
+      return this.models[`${this.id}`];
+    },
+  },
+  watch: {
+    id: {
+      immediate: true,
+      async handler(id) {
+        await this.getModels(id);
+      },
+    },
+    // models: {
+    //   immediate: true,
+    //   async handler(models) {
+    //     this.projectModels = models[`${this.id}`];
+    //   },
+    // },
+  },
+};
 </script>

@@ -22,4 +22,8 @@ export default {
         const project = await projectRepository.update(updatedProject);
         commit(types.SET_UPDATE_PROJECT, project);
     },
+    async [types.GET_PROJECT_MODELS]({ commit }, projectId) {
+        const models = await projectRepository.getModels(projectId);
+        commit(types.SET_PROJECT_MODELS, { projectId, models });
+    },
 }
