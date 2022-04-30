@@ -3,7 +3,9 @@
     <b-table striped hover :items="items">
       <template #cell()="data">
         <div>
-          <div v-if="allowShowValue(data.value)">{{ data.value }}</div>
+          <div v-if="allowShowValue(data.value)">
+            {{ data.value }}
+          </div>
           <div v-else>
             <b-icon v-if="data.value" icon="check" />
             <b-icon v-else icon="x" />
@@ -25,16 +27,17 @@ export default {
   },
   methods: {
     allowShowValue(value) {
-      return value?.length !== 0;
+      return value?.length !== 0 && typeof value !== 'boolean';
     },
   },
 };
 </script>
 <style lang="scss">
-    .model-card {
-        max-width: 450px;
-        .table > :not(caption) > * > * {
-            padding: 4px;
-        }
-    }
+.model-card {
+  max-width: 450px;
+  .table > :not(caption) > * > * {
+    padding: 4px;
+    text-align: center;
+  }
+}
 </style>
