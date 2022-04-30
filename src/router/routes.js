@@ -8,6 +8,15 @@ export default [
     component: () => import('../views/Home.vue'),
   },
   {
+    path: '/project/:id',
+    name: 'ProjectDetail',
+    props: true,
+    meta: {
+      layout: 'default',
+    },
+    component: () => import('../views/ProjectDetail.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     meta: {

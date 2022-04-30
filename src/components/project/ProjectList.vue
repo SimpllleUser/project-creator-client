@@ -1,8 +1,14 @@
 <template>
   <div class="projects-list p-1">
     <div
-      class="projects-list--header d-flex justify-content-between alert alert-dark"
+      class="
+        projects-list--header
+        d-flex
+        justify-content-between
+        alert alert-dark
+      "
     >
+      <!-- <router-link :to="'/home'">Home</router-link> -->
       <project-form id="create-project" />
       <div class="projects-list--header-title"><h4>Projects</h4></div>
       <div class="projects-list--header-actions">
@@ -18,6 +24,15 @@
       <b-table :items="projects" :fields="fields" striped hover>
         <template #cell(createdAt)="data">
           {{ new Date(data.item.createdAt).toLocaleString() }}
+        </template>
+        <template #cell(title)="data">
+          <div>
+            <b-button variant="link">
+              <router-link :to="`/project/${data.item.id}`">
+                {{ data.item.title }}
+              </router-link>
+            </b-button>
+          </div>
         </template>
         <template #cell(actions)="data">
           <div class="d-none"></div>
