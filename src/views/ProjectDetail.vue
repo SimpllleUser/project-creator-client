@@ -2,9 +2,7 @@
   <div class="about">
     <h1>Project detail {{ id }}</h1>
     <div v-for="{ model } in projectModels" :key="model.name">
-      <b-card :header="model.name">
-          <model-card :items="getArrayFromObject(model.fields)"/>
-      </b-card>
+     <model-card :name=model.name :items="getArrayFromObject(model.fields)"/>
     </div>
   </div>
 </template>
@@ -47,12 +45,6 @@ export default {
         await this.getModels(id);
       },
     },
-    // models: {
-    //   immediate: true,
-    //   async handler(models) {
-    //     this.projectModels = models[`${this.id}`];
-    //   },
-    // },
   },
 };
 </script>

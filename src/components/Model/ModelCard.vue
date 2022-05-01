@@ -1,6 +1,24 @@
 <template>
   <div class="model-card">
-    <b-table bordered hover :items="items">
+    <b-table caption-top small bordered hover :items="items">
+      <template #table-caption>
+        <div class="header d-flex justify-content-between align-items-center">
+          <div class="text-center text-dark">
+            Model
+            <span>
+              <b>{{ name }}</b></span
+            >
+          </div>
+          <div class="actions">
+            <b-button size="sm" variant="outline-dark"
+              ><b-icon icon="pen"
+            /></b-button>
+            <b-button size="sm" variant="outline-dark"
+              ><b-icon icon="trash"
+            /></b-button>
+          </div>
+        </div>
+      </template>
       <template #cell()="data">
         <div>
           <div v-if="allowShowValue(data.value)">
@@ -12,6 +30,11 @@
           </div>
         </div>
       </template>
+      <template #head()="scope">
+        <div class="text-nowrap">
+          {{ scope.label }}
+        </div>
+      </template>
     </b-table>
   </div>
 </template>
@@ -20,6 +43,10 @@
 export default {
   name: "ModelCard",
   props: {
+    name: {
+      type: String,
+      default: "Table name",
+    },
     items: {
       type: Array,
       default: () => [],
@@ -27,7 +54,7 @@ export default {
   },
   methods: {
     allowShowValue(value) {
-      return value?.length !== 0 && typeof value !== 'boolean';
+      return value?.length !== 0 && typeof value !== "boolean";
     },
   },
 };
