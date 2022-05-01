@@ -1,6 +1,6 @@
 <template>
   <div class="model-card">
-    <b-table caption-top small bordered hover :items="items">
+    <b-table caption-top small bordered hover :items="modelItems">
       <template #table-caption>
         <div class="header d-flex justify-content-between align-items-center">
           <div class="text-center text-dark">
@@ -10,7 +10,7 @@
             >
           </div>
           <div class="actions">
-            <b-button size="sm" variant="outline-dark"
+            <b-button size="sm" variant="outline-dark" @click="toggleTableMode"
               ><b-icon icon="pen"
             /></b-button>
             <b-button size="sm" variant="outline-dark"
@@ -22,7 +22,8 @@
       <template #cell()="data">
         <div>
           <div v-if="allowShowValue(data.value)">
-            {{ data.value }}
+            {{ modelItems[data.index][data.field.key] }}
+            <b-input v-if="isEditable" type="text" v-model="modelItems[data.index][data.field.key]" />
           </div>
           <div v-else>
             <b-icon v-if="data.value" icon="check" />
@@ -52,14 +53,31 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      isEditable: false,
+      editableItems: [],
+    };
+  },
+  watch: {
+    items: {
+      immediate: true,
+      handler() {
+        this.modelItems = this.items;
+      },
+    },
+  },
   methods: {
+    toggleTableMode() {
+      this.isEditable = !this.isEditable;
+    },
     allowShowValue(value) {
       return value?.length !== 0 && typeof value !== "boolean";
     },
   },
 };
 </script>
-<style lang="scss">
+<!-- <style lang="scss">
 .model-card {
   max-width: 350px;
   .table > :not(caption) > * > * {
@@ -68,4 +86,4 @@ export default {
     cursor: pointer;
   }
 }
-</style>
+</style> -->
