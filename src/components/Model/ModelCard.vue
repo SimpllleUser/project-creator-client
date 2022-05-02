@@ -1,35 +1,82 @@
 <template>
-  <div class="model-card">
-    <b-table caption-top small bordered hover :items="modelItems">
+  <div class="model-card p-1">
+    <b-alert variant="warning" :show="existDuplicateName">
+      Exist duplicate col name
+    </b-alert>
+    <b-alert variant="warning" :show="existInvalidName">
+      Exist invalid col name
+    </b-alert>
+    <b-alert variant="warning" :show="existInvalidAutoIncrement">
+      Exist invalid auto increment col
+    </b-alert>
+    <b-table
+      caption-top
+      caption-bottom
+      small
+      bordered
+      hover
+      :fields="fields"
+      :items="modelItems"
+    >
       <template #table-caption>
         <div class="header d-flex justify-content-between align-items-center">
           <div class="text-center text-dark">
             Model
             <span>
-              <b>{{ name }}</b></span
-            >
+              <b>{{ name }}</b>
+            </span>
           </div>
-          <div class="actions">
-            <b-button size="sm" variant="outline-dark" @click="toggleTableMode"
-              ><b-icon icon="pen"
-            /></b-button>
-            <b-button size="sm" variant="outline-dark"
-              ><b-icon icon="trash"
-            /></b-button>
+          <div class="actions d-flex justify-content-center">
+            <b-button-group>
+              <b-button
+                v-if="isEditable"
+                size="sm"
+                variant="outline-dark"
+                @click="addRow()"
+              >
+                <b-icon icon="plus"></b-icon>
+              </b-button>
+              <b-button
+                size="sm"
+                variant="outline-dark"
+                @click="toggleTableMode"
+                ><b-icon icon="pen"
+              /></b-button>
+              <b-button size="sm" variant="outline-dark"
+                ><b-icon icon="trash"
+              /></b-button>
+            </b-button-group>
           </div>
         </div>
       </template>
-      <template #cell()="data">
-        <div>
-          <div v-if="allowShowValue(data.value)">
-            {{ modelItems[data.index][data.field.key] }}
-            <b-input v-if="isEditable" type="text" v-model="modelItems[data.index][data.field.key]" />
-          </div>
-          <div v-else>
-            <b-icon v-if="data.value" icon="check" />
-            <b-icon v-else icon="x" />
-          </div>
-        </div>
+      <template #cell(name)="data">
+        <b-form-input
+          type="text"
+          v-model="data.item.name"
+          placeholder="Name"
+        ></b-form-input>
+      </template>
+      <template #cell(primaryKey)="data">
+        <b-form-checkbox
+          :disabled="(existAutoIncrement && !data.item.primaryKey) || !isEditable"
+          v-model="data.item.primaryKey"
+        />
+      </template>
+      <template #cell(type)="data">
+        <b-form-select
+          v-model="data.item.type"
+          :options="typeOption"
+          :disabled="!isEditable"
+        ></b-form-select>
+      </template>
+      <template #cell(autoIncrement)="data">
+        <b-form-checkbox
+          v-model="data.item.autoIncrement"
+          :disabled="!isEditable"
+        />
+      </template>
+      <template #cell(allowNull)="data">
+        <b-form-checkbox v-model="data.item.allowNull" :disabled="!isEditable" />
       </template>
       <template #head()="scope">
         <div class="text-nowrap">
@@ -57,6 +104,40 @@ export default {
     return {
       isEditable: false,
       editableItems: [],
+      modelItems: [],
+      typeOption: [
+        "CHAR",
+        "INTEGER",
+        "VARCHAR",
+        "STRING",
+        "TEXT",
+        "BOOLEAN",
+        "FLOAT",
+        "DOUBLE",
+        "DATE",
+      ],
+      fields: [
+        {
+          key: "name",
+          label: "Name",
+        },
+        {
+          key: "primaryKey",
+          label: "Primary Key",
+        },
+        {
+          key: "type",
+          label: "Type",
+        },
+        {
+          key: "autoIncrement",
+          label: "Auto Increment",
+        },
+        {
+          key: "allowNull",
+          label: "Allow Null",
+        },
+      ],
     };
   },
   watch: {
@@ -67,9 +148,39 @@ export default {
       },
     },
   },
+  computed: {
+    existAutoIncrement() {
+      return this.modelItems.find(({ primaryKey }) => Boolean(primaryKey));
+    },
+    existInvalidAutoIncrement() {
+      return this.modelItems.find(
+        ({ autoIncrement, type }) =>
+          Boolean(autoIncrement) && type !== "INTEGER"
+      )?.name?.length;
+    },
+    existDuplicateName() {
+      const names = this.modelItems.map(({ name }) => name.trim());
+      return [...new Set(names)].length < this.modelItems.length;
+    },
+    existInvalidName() {
+      return (
+        this.modelItems.find(({ name }) => this.existNumber(name))?.name
+          ?.length || false
+      );
+    },
+  },
   methods: {
+    existNumber(string) {
+      return string.split("").find((char) => !isNaN(+char));
+    },
     toggleTableMode() {
       this.isEditable = !this.isEditable;
+    },
+    addRow() {
+      this.modelItems = [
+        ...this.modelItems,
+        { name: " ", type: "", allowNull: false },
+      ];
     },
     allowShowValue(value) {
       return value?.length !== 0 && typeof value !== "boolean";
