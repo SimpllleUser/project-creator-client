@@ -11,7 +11,6 @@
     </b-alert>
     <b-table
       caption-top
-      caption-bottom
       small
       bordered
       hover
@@ -29,6 +28,13 @@
           <div class="actions d-flex justify-content-center">
             <b-button-group>
               <b-button
+                size="sm"
+                variant="outline-dark"
+                @click="initModelItems"
+              >
+                <b-icon icon="arrow-counterclockwise"></b-icon>
+              </b-button>
+              <b-button
                 v-if="isEditable"
                 size="sm"
                 variant="outline-dark"
@@ -42,7 +48,7 @@
                 @click="toggleTableMode"
                 ><b-icon icon="pen"
               /></b-button>
-              <b-button size="sm" variant="outline-dark"
+              <b-button size="sm" variant="outline-dark" @click="deleteAllCols"
                 ><b-icon icon="trash"
               /></b-button>
             </b-button-group>
@@ -58,7 +64,9 @@
       </template>
       <template #cell(primaryKey)="data">
         <b-form-checkbox
-          :disabled="(existAutoIncrement && !data.item.primaryKey) || !isEditable"
+          :disabled="
+            (existAutoIncrement && !data.item.primaryKey) || !isEditable
+          "
           v-model="data.item.primaryKey"
         />
       </template>
@@ -76,7 +84,10 @@
         />
       </template>
       <template #cell(allowNull)="data">
-        <b-form-checkbox v-model="data.item.allowNull" :disabled="!isEditable" />
+        <b-form-checkbox
+          v-model="data.item.allowNull"
+          :disabled="!isEditable"
+        />
       </template>
       <template #head()="scope">
         <div class="text-nowrap">
@@ -84,6 +95,7 @@
         </div>
       </template>
     </b-table>
+    <div><b-button @click="saveChange">Save</b-button></div>
   </div>
 </template>
 
@@ -143,9 +155,7 @@ export default {
   watch: {
     items: {
       immediate: true,
-      handler() {
-        this.modelItems = this.items;
-      },
+      handler: "initModelItems",
     },
   },
   computed: {
@@ -170,6 +180,15 @@ export default {
     },
   },
   methods: {
+    saveChange() {
+      console.log('!');
+    },
+    initModelItems() {
+      this.modelItems = JSON.parse(JSON.stringify(this.items));
+    },
+    deleteAllCols() {
+      this.modelItems = [];
+    },
     existNumber(string) {
       return string.split("").find((char) => !isNaN(+char));
     },
