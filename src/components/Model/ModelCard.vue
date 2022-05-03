@@ -19,10 +19,17 @@
     >
       <template #table-caption>
         <div class="header d-flex justify-content-between align-items-center">
-          <div class="text-center text-dark">
+          <div class="text-center text-dark d-flex align-items-center">
             Model
-            <span>
-              <b>{{ name }}</b>
+            <span class="pr-4 pl-4">
+              <b v-if="!isEditable">{{ modelName }}</b>
+              <b-form-input
+                v-else
+                type="text"
+                v-model="modelName"
+                placeholder="Name"
+                :readonly="!isEditable"
+              />
             </span>
           </div>
           <div class="actions d-flex justify-content-center">
@@ -39,7 +46,7 @@
                 v-if="isEditable"
                 size="sm"
                 variant="outline-dark"
-                @click="initModelItems"
+                @click="initModel"
               >
                 <b-icon icon="arrow-counterclockwise"></b-icon>
               </b-button>
@@ -53,7 +60,7 @@
               </b-button>
               <b-button
                 size="sm"
-                :variant="`${ isEditable ? 'dark' :'outline-dark' }`"
+                :variant="`${isEditable ? 'dark' : 'outline-dark'}`"
                 @click="toggleTableMode"
                 ><b-icon icon="pen"
               /></b-button>
@@ -122,12 +129,23 @@ export default {
       type: Array,
       default: () => [],
     },
+    tableParams: {
+      type: Object,
+      default: () => ({
+        freezeTableName: true,
+        paranoid: true,
+        tableName: "",
+        timestamps: true,
+        underscored: true,
+      }),
+    },
   },
   data() {
     return {
       isEditable: false,
       editableItems: [],
       modelItems: [],
+      modelName: "",
       typeOption: [
         "CHAR",
         "INTEGER",
@@ -166,7 +184,7 @@ export default {
   watch: {
     items: {
       immediate: true,
-      handler: "initModelItems",
+      handler: "initModel",
     },
   },
   computed: {
@@ -196,8 +214,21 @@ export default {
   methods: {
     saveChange() {
       console.log("!");
+      const body = {
+        ["table-params"]: this.tableParams,
+        fields: Object.fromEntries(
+          this.modelItems.map(({ name, ...params }) => [name, params])
+        ),
+        name: this.modelName,
+      };
+      const updatedModel = {
+        body,
+        prevName: this.name,
+      };
+      console.log(updatedModel);
     },
-    initModelItems() {
+    initModel() {
+      this.modelName = this.name;
       this.modelItems = JSON.parse(JSON.stringify(this.items));
     },
     deleteAllCols() {

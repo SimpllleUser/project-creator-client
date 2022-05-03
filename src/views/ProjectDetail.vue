@@ -2,7 +2,11 @@
   <div class="about">
     <h1>Project detail {{ id }}</h1>
     <div v-for="{ model } in projectModels" :key="model.name">
-     <model-card :name=model.name :items="getArrayFromObject(model.fields)"/>
+      <model-card
+        :name="model.name"
+        :items="getArrayFromObject(model.fields)"
+        :table-params="model['table-params']"
+      />
     </div>
   </div>
 </template>
