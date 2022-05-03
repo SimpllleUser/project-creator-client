@@ -19,18 +19,27 @@
     >
       <template #table-caption>
         <div class="header d-flex justify-content-between align-items-center">
-          <div class="text-center text-dark d-flex align-items-center">
-            Model
-            <span class="pr-4 pl-4">
-              <b v-if="!isEditable">{{ modelName }}</b>
-              <b-form-input
-                v-else
-                type="text"
-                v-model="modelName"
-                placeholder="Name"
-                :readonly="!isEditable"
-              />
-            </span>
+          <div>
+            <div class="text-center text-dark d-flex align-items-center">
+              Model
+              <span class="pr-4 pl-4">
+                <b>{{ modelName }}</b>
+              </span>
+            </div>
+            <div class="text-center text-dark d-flex align-items-center">
+              table
+              <span class="pr-4 pl-4">
+                <b v-if="!isEditable">{{ tableName }}</b>
+                <b-form-input
+                  v-else
+                  type="text"
+                  v-model="tableName"
+                  placeholder="Table name"
+                  :readonly="!isEditable"
+                  size="sm"
+                />
+              </span>
+            </div>
           </div>
           <div class="actions d-flex justify-content-center">
             <b-button-group>
@@ -96,8 +105,7 @@
       </template>
       <template #cell(autoIncrement)="data">
         <b-form-checkbox
-                v-if="data.item.type === 'INTEGER'"
-
+          v-if="data.item.type === 'INTEGER'"
           v-model="data.item.autoIncrement"
           :disabled="!isEditable"
         />
@@ -154,6 +162,7 @@ export default {
       editableItems: [],
       modelItems: [],
       modelName: "",
+      tableName: "",
       typeOption: [
         "CHAR",
         "INTEGER",
@@ -216,7 +225,12 @@ export default {
       );
     },
     isChangedModel() {
-      return _.isEqual(this.items, this.modelItems);
+      const isEqualModelCols = _.isEqual(this.items, this.modelItems);
+      return [
+        isEqualModelCols,
+        this.tableName !== this.tableParams.name,
+        this.modelName !== this.name,
+      ].every((item) => item);
     },
   },
   methods: {
@@ -225,7 +239,7 @@ export default {
     }),
     saveChange() {
       const body = {
-        ["table-params"]: this.tableParams,
+        ["table-params"]: { ...this.tableParams, tableName: this.tableName },
         fields: Object.fromEntries(
           this.modelItems.map(({ name, ...params }) => [name, params])
         ),
@@ -236,10 +250,11 @@ export default {
         prevName: this.name,
       };
       this.saveChangeModel({ projectId: 23, body: updatedModel });
-      console.log(updatedModel);
+      this.isEditable = false;
     },
     initModel() {
       this.modelName = this.name;
+      this.tableName = this.tableParams.tableName;
       this.modelItems = JSON.parse(JSON.stringify(this.items));
     },
     deleteAllCols() {
