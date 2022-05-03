@@ -26,4 +26,11 @@ export default {
         const { data } = await client.get(`${defaultURL}/${projectId}/db/models`);
         return data;
     },
+    async updateModels({ projectId, body }) {
+        const { data } = await client.patch(
+            `${defaultURL}/${projectId}/db/models`,
+            body,
+        );
+        return data;
+    },
 };

@@ -3,6 +3,7 @@
     <h1>Project detail {{ id }}</h1>
     <div v-for="{ model } in projectModels" :key="model.name">
       <model-card
+        :project-id="Number(id)"
         :name="model.name"
         :items="getArrayFromObject(model.fields)"
         :table-params="model['table-params']"
@@ -16,7 +17,6 @@ import ModelCard from "../components/Model/ModelCard.vue";
 import types from "../store/modules/projects/types";
 
 export default {
-  // eslint-disable-next-line vue/no-unused-components
   components: { ModelCard },
   name: "ProjectDetail",
   props: {

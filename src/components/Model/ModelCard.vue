@@ -117,10 +117,16 @@
 
 <script>
 import _ from "lodash";
+import { mapActions } from "vuex";
+import types from "../../store/modules/projects/types";
 
 export default {
   name: "ModelCard",
   props: {
+    projectId: {
+      type: Number,
+      require: true,
+    },
     name: {
       type: String,
       default: "Table name",
@@ -212,8 +218,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions("projects", {
+      saveChangeModel: types.SAVE_CHANGE_PROJECT_MODELS,
+    }),
     saveChange() {
-      console.log("!");
       const body = {
         ["table-params"]: this.tableParams,
         fields: Object.fromEntries(
@@ -225,6 +233,7 @@ export default {
         body,
         prevName: this.name,
       };
+      this.saveChangeModel({ projectId: 23, body: updatedModel });
       console.log(updatedModel);
     },
     initModel() {
