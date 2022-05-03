@@ -53,7 +53,7 @@
               </b-button>
               <b-button
                 size="sm"
-                variant="outline-dark"
+                :variant="`${ isEditable ? 'dark' :'outline-dark' }`"
                 @click="toggleTableMode"
                 ><b-icon icon="pen"
               /></b-button>
