@@ -249,7 +249,7 @@ export default {
         body,
         prevName: this.name,
       };
-      this.saveChangeModel({ projectId: 23, body: updatedModel });
+      this.saveChangeModel({ projectId: this.projectId, body: updatedModel });
       this.isEditable = false;
     },
     initModel() {
