@@ -37,5 +37,13 @@ export default {
             ...projectModelsState,
             [`${projectId}`]: models,
         };
-    }
+    },
+    [types.ADD_PROJECT_MODEL](state, { projectId, model }) {
+        const projectModelsState = state.models;
+        const updatedModel = [...projectModelsState[`${projectId}`], { model }];
+        state.models = {
+            ...projectModelsState,
+            [`${projectId}`]: updatedModel,
+        };
+    },
 }

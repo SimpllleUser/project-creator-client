@@ -33,4 +33,10 @@ export default {
         );
         return data;
     },
+    async deleteModel({ projectId, modelName }) {
+        const { data } = await client.delete(
+            `${defaultURL}/${projectId}/db/models/${modelName}`,
+        );
+        return data;
+    },
 };

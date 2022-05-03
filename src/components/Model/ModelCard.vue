@@ -55,6 +55,13 @@
                 v-if="isEditable"
                 size="sm"
                 variant="outline-dark"
+                @click="deleteAllCols"
+                ><b-icon icon="eraser"
+              /></b-button>
+              <b-button
+                v-if="isEditable"
+                size="sm"
+                variant="outline-dark"
                 @click="initModel"
               >
                 <b-icon icon="arrow-counterclockwise"></b-icon>
@@ -73,7 +80,7 @@
                 @click="toggleTableMode"
                 ><b-icon icon="pen"
               /></b-button>
-              <b-button size="sm" variant="outline-dark" @click="deleteAllCols"
+              <b-button size="sm" variant="outline-dark" @click="deleteModel({ projectId, modelName: name })"
                 ><b-icon icon="trash"
               /></b-button>
             </b-button-group>
@@ -236,6 +243,7 @@ export default {
   methods: {
     ...mapActions("projects", {
       saveChangeModel: types.SAVE_CHANGE_PROJECT_MODELS,
+      deleteModel: types.DELETE_PROJECT_MODELS,
     }),
     saveChange() {
       const body = {

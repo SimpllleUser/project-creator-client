@@ -1,6 +1,12 @@
 <template>
   <div class="about">
     <h1>Project detail {{ id }}</h1>
+    <div>
+      <b-button size="sm" @click="$bvModal.show('model-form')"
+        >Add model</b-button
+      >
+      <model-form :projectId="Number(id)" />
+    </div>
     <div v-for="{ model } in projectModels" :key="model.name">
       <model-card
         :project-id="Number(id)"
@@ -14,10 +20,11 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import ModelCard from "../components/Model/ModelCard.vue";
+import ModelForm from "../components/Model/ModelForm.vue";
 import types from "../store/modules/projects/types";
 
 export default {
-  components: { ModelCard },
+  components: { ModelCard, ModelForm },
   name: "ProjectDetail",
   props: {
     id: {
@@ -30,7 +37,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions("projects", { getModels: types.GET_PROJECT_MODELS }),
+    ...mapActions("projects", {
+      getModels: types.GET_PROJECT_MODELS,
+    }),
     getArrayFromObject(object) {
       const keys = Object.keys(object);
       return keys.map((key) => ({ name: key, ...object[key] }));

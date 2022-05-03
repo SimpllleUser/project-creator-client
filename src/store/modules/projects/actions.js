@@ -29,4 +29,7 @@ export default {
     async [types.SAVE_CHANGE_PROJECT_MODELS](_, params) {
         await projectRepository.updateModels(params);
     },
+    async[types.DELETE_PROJECT_MODELS](_, params) {
+        await projectRepository.deleteModel(params);
+    },
 }

@@ -1,81 +1,82 @@
 <template>
-  <div class="model-form">
-    <!-- <b-form @submit="onSubmit">
-      <div class="row">
-      <b-table :fields="fields">
-      </b-table>
-        <b-form-group label="Name:">
-          <b-form-input id="model-name" type="text" v-model="name" required />
-        </b-form-group>
-        <b-form-group label="Primary Key:">
-          <b-form-checkbox id="model-primary" v-model="primaryKey" />
-        </b-form-group>
-        <b-form-group label="Type:">
-          <b-form-select id="model-type" v-model="type" required />
-        </b-form-group>
-        <b-form-group label="Auto increment:">
-          <b-form-checkbox id="model-autoincrement" v-model="autoIncrement" />
-        </b-form-group>
-        <b-form-group label="Allow null:">
-          <b-form-checkbox id="model-allownull" v-model="allowNull" required />
-        </b-form-group>
-      </div>
-    </b-form> -->
-  </div>
+  <b-modal id="model-form" hide-footer hide-header>
+    <div>
+      <b-form @submit="onSubmit">
+        <div class="row">
+          <b-form-group
+            id="input-group-name"
+            label="Model name"
+            label-for="name"
+          >
+            <b-form-input
+              id="name"
+              v-model="name"
+              type="text"
+              required
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-table-name"
+            label="Table name"
+            label-for="name"
+          >
+            <b-form-input
+              id="name"
+              v-model="tableName"
+              type="tableName"
+              required
+            />
+          </b-form-group>
+        </div>
+        <div class="p-1">
+          <div class="ml-auto">
+            <b-button type="submit" variant="dark" class="ml-auto"
+              >Add</b-button
+            >
+          </div>
+        </div>
+      </b-form>
+    </div>
+  </b-modal>
 </template>
 <script>
+import { mapMutations } from "vuex";
+import types from "../../store/modules/projects/types";
+
 export default {
   name: "ModelForm",
   props: {
-    model: {
-      type: Object,
-      require: false,
-      //   default: () => ({
-      //     name: "",
-      //     primaryKey: false,
-      //     type: "",
-      //     autoIncrement: false,
-      //     allowNull: false,
-      //   }),
+    projectId: {
+      type: Number,
+      require: true,
     },
   },
   data() {
     return {
       name: "",
-      primaryKey: false,
-      type: "",
-      autoIncrement: false,
-      allowNull: false,
-      fields: [
-        {
-          key: "name",
-          label: "Name",
-        },
-        {
-          key: "primaryKey",
-          label: "Primary Key",
-        },
-        {
-          key: "type",
-          label: "Type",
-        },
-        {
-          key: "autoIncrement",
-          label: "Auto Increment",
-        },
-        {
-          key: "allowNull",
-          label: "Allow Null",
-        },
-      ],
+      tableName: "",
     };
   },
   methods: {
+    ...mapMutations("projects", {
+      addModel: types.ADD_PROJECT_MODEL,
+    }),
     onSubmit(event) {
       event.preventDefault();
+      const templateModel = {
+        "table-params": {
+          timestamps: true,
+          paranoid: true,
+          underscored: true,
+          freezeTableName: true,
+          tableName: this.tableName,
+        },
+        fields: {},
+        name: this.name,
+      };
+      this.addModel({ projectId: this.projectId, model: templateModel });
+      this.$bvModal.hide("model-form");
     },
   },
 };
 </script>
-<style lang="scss">
-</style>
