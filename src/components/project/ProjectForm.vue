@@ -98,7 +98,7 @@ export default {
   },
 };
 </script>
-<template>
+<!-- <template>
   <b-modal :id="id" :title="modalTitle" hide-header-close hide-footer>
     <b-form @submit="onSubmit">
       <div class="form-body pb-2">
@@ -197,4 +197,4 @@ export default {
     },
   },
 };
-</script>
+</script> -->

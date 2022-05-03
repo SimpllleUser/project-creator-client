@@ -28,6 +28,15 @@
           <div class="actions d-flex justify-content-center">
             <b-button-group>
               <b-button
+                v-if="isEditable && !isChangedModel"
+                size="sm"
+                variant="outline-dark"
+                @click="saveChange"
+              >
+                <b-icon icon="save"></b-icon>
+              </b-button>
+              <b-button
+                v-if="isEditable"
                 size="sm"
                 variant="outline-dark"
                 @click="initModelItems"
@@ -60,6 +69,7 @@
           type="text"
           v-model="data.item.name"
           placeholder="Name"
+          :readonly="!isEditable"
         ></b-form-input>
       </template>
       <template #cell(primaryKey)="data">
@@ -95,11 +105,12 @@
         </div>
       </template>
     </b-table>
-    <div><b-button @click="saveChange">Save</b-button></div>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
   name: "ModelCard",
   props: {
@@ -178,10 +189,13 @@ export default {
           ?.length || false
       );
     },
+    isChangedModel() {
+      return _.isEqual(this.items, this.modelItems);
+    },
   },
   methods: {
     saveChange() {
-      console.log('!');
+      console.log("!");
     },
     initModelItems() {
       this.modelItems = JSON.parse(JSON.stringify(this.items));
