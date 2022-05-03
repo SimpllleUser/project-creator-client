@@ -96,6 +96,8 @@
       </template>
       <template #cell(autoIncrement)="data">
         <b-form-checkbox
+                v-if="data.item.type === 'INTEGER'"
+
           v-model="data.item.autoIncrement"
           :disabled="!isEditable"
         />
