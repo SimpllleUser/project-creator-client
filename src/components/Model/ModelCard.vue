@@ -1,5 +1,5 @@
 <template>
-  <div class="model-card p-1">
+  <div class="p-1" :class="{ 'model-card': !isEditable }">
     <b-alert variant="warning" :show="existDuplicateName">
       Exist duplicate col name
     </b-alert>
@@ -80,7 +80,10 @@
                 @click="toggleTableMode"
                 ><b-icon icon="pen"
               /></b-button>
-              <b-button size="sm" variant="outline-dark" @click="deleteModel({ projectId, modelName: name })"
+              <b-button
+                size="sm"
+                variant="outline-dark"
+                @click="deleteModel({ projectId, modelName: name })"
                 ><b-icon icon="trash"
               /></b-button>
             </b-button-group>
@@ -286,7 +289,7 @@ export default {
   },
 };
 </script>
-<!-- <style lang="scss">
+<style lang="scss">
 .model-card {
   max-width: 350px;
   .table > :not(caption) > * > * {
@@ -295,4 +298,4 @@ export default {
     cursor: pointer;
   }
 }
-</style> -->
+</style>
