@@ -21,17 +21,28 @@
         />
       </div>
     </b-collapse>
+    <div>
+      <div>
+        <div class="header-tables">
+          <h4>Tables</h4>
+        </div>
+        <div v-for="{ model } in projectModels" :key="model.name">
+          <db-table :keys="getArrayFromObject(model.fields)" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
 import ModelCard from "../components/Model/ModelCard.vue";
 import ModelForm from "../components/Model/ModelForm.vue";
+import DbTable from "../components/Tables/DbTable.vue";
 import types from "../store/modules/projects/types";
 
 export default {
-  components: { ModelCard, ModelForm },
   name: "ProjectDetail",
+  components: { ModelCard, ModelForm, DbTable },
   props: {
     id: {
       type: String,
