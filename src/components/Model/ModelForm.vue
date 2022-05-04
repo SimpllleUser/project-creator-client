@@ -28,12 +28,10 @@
             />
           </b-form-group>
         </div>
-        <div class="p-1">
-          <div class="ml-auto">
-            <b-button type="submit" variant="dark" class="ml-auto"
-              >Add</b-button
-            >
-          </div>
+        <div class="form-footer d-flex justify-content-end pt-2">
+          <b-button type="submit" variant="outline-dark" class="ml-auto">
+            Add
+          </b-button>
         </div>
       </b-form>
     </div>
