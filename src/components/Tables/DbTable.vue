@@ -1,10 +1,12 @@
 <template>
   <div class="table">
-    <h1>Table</h1>
     <div>
       <div>
         <b-button size="sm" @click="addItem">
           <span class="text-black">Add</span>
+        </b-button>
+        <b-button size="sm" @click="save">
+          <span class="text-black">Save</span>
         </b-button>
       </div>
       <b-editable-table
@@ -29,13 +31,14 @@
 </template>
 <script>
 import BEditableTable from "bootstrap-vue-editable-table";
-// import { mapState } from "vuex";
-const defaultItem = {
-  id: "-",
-  username: "-",
-  token: "-",
-  passwordss: "-",
-};
+
+// const defaultItem = {
+//   id: "-",
+//   username: "-",
+//   token: "-",
+//   passwordss: "-",
+// };
+
 export default {
   name: "DbTable",
   components: {
@@ -49,11 +52,15 @@ export default {
   },
   data() {
     return {
-      items: [defaultItem],
+      items: [],
     };
   },
   computed: {
     // ...mapState("app", ["typeOption"]),
+    defaultItem() {
+      const keyValue = this.keys.map(({ name }) => [name, '-']);
+      return Object.fromEntries(keyValue);
+    },
     fields() {
       const tableKeys = this.keys.map(({ name, type }) => ({
         key: name,
@@ -85,15 +92,25 @@ export default {
       return Object?.keys(typeStatus)?.find((key) => typeStatus[key]);
     },
     addItem() {
+      const defaultItem = JSON.parse(JSON.stringify(this.defaultItem));
       this.items = [...this.items, defaultItem];
     },
     deleteRow({ index }) {
       this.items = this.items.filter((_, indexRow) => indexRow !== index);
     },
+    save() {
+      console.log('saved table ', this.items);
+    },
+  },
+  mounted() {
+    this.addItem();
   },
 };
 </script>\
 <style lang="scss">
+.editable-table {
+  width: 100% !important;
+}
 .data-cell {
   padding: 5px;
   text-align: center;
