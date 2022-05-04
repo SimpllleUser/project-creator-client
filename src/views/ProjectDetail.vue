@@ -2,19 +2,25 @@
   <div class="about">
     <h1>Project detail {{ id }}</h1>
     <div>
+      <model-form :projectId="Number(id)" />
+    </div>
+
+    <div class="p-2">
+      <h4><b-button v-b-toggle.models variant="dark">Models</b-button></h4>
+    </div>
+    <b-collapse id="models" class="p-1">
       <b-button size="sm" @click="$bvModal.show('model-form')"
         >Add model</b-button
       >
-      <model-form :projectId="Number(id)" />
-    </div>
-    <div v-for="{ model } in projectModels" :key="model.name">
-      <model-card
-        :project-id="Number(id)"
-        :name="model.name"
-        :items="getArrayFromObject(model.fields)"
-        :table-params="model['table-params']"
-      />
-    </div>
+      <div v-for="{ model } in projectModels" :key="model.name">
+        <model-card
+          :project-id="Number(id)"
+          :name="model.name"
+          :items="getArrayFromObject(model.fields)"
+          :table-params="model['table-params']"
+        />
+      </div>
+    </b-collapse>
   </div>
 </template>
 <script>
